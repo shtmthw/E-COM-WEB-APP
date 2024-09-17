@@ -3,9 +3,11 @@ import cors from 'cors'
 import path from 'path'
 import { fileURLToPath } from 'url';
 import item_route from './routes/item_routes.js';
+import user_routes from './routes/user_routes.js';
 import { DB } from './config/db.js';
 const app = express()
-
+import dotenv from 'dotenv';
+dotenv.config();
 const port = 5000
 
 const __filename = fileURLToPath(import.meta.url);
@@ -27,7 +29,9 @@ app.get('/' , (req , res)=>{
     res.send('Hi')
 })
 app.use('/api/items' , item_route)
-app.use('/images' , express.static(path.join(__dirname , 'images')))
+app.use('/api/user' , user_routes)
+app.use('/item_images' , express.static(path.join(__dirname , 'item_images')))
+app.use('/user_images' , express.static(path.join(__dirname , 'user_images')))
 
 app.listen(port,()=>{
     console.log('server is on')

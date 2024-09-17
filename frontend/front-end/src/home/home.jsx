@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
 import { StoreContext } from '../globalcontex/store_contex_GLB'
+import Navbar from '../navbar/navbar'
 function Home() {
     
     const {Check_context} = useContext(StoreContext)
@@ -7,7 +8,7 @@ function Home() {
   
     return (
     <div>
-      <h1>{Check_context}</h1>
+      <Navbar/>
     </div>
   )
 }

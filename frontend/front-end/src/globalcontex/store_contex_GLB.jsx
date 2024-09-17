@@ -3,10 +3,18 @@ import { createContext, useContext, useEffect, useState } from "react";
 export const StoreContext = createContext(null)
 
 const StoreContProv = (props) => {
-    const Check_context = 'Hello Users!'
+    
+    const [token , setToken] = useState(false)
+
+    useEffect(()=>{
+        if(localStorage.getItem('token')){
+            setToken(true)
+        }
+    },[])
 
     const contextval = {
-        Check_context
+        token,
+        setToken
     }
 
     return (
