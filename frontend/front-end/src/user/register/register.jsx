@@ -3,7 +3,7 @@ import axios from 'axios'
 import { StoreContext } from '../../globalcontex/store_contex_GLB'
 
 function Register({ setReg }) {
-    const { token, setToken } = useContext(StoreContext)
+    const { token, setToken,user_img,setUser_img } = useContext(StoreContext)
 
     const [image, setU_image] = useState("")
     const [u_data, setU_data] = useState({
@@ -23,10 +23,10 @@ function Register({ setReg }) {
         try {
             event.preventDefault()
             const form_instance = new FormData()
-            form_instance.append('u_name' , u_data.u_name)
-            form_instance.append('u_email' , u_data.u_email )
-            form_instance.append('u_password' , u_data.u_password)
-            form_instance.append('image' , image)
+            form_instance.append('u_name', u_data.u_name)
+            form_instance.append('u_email', u_data.u_email)
+            form_instance.append('u_password', u_data.u_password)
+            form_instance.append('image', image)
             const resp = await axios.post('http://localhost:5000/api/user/register', form_instance)
             if (resp.data.success) {
                 window.alert("Register Successfully!")
@@ -36,14 +36,30 @@ function Register({ setReg }) {
                     u_password: '',
                     image: ''
                 })
-                setToken(resp.data.token)
-                localStorage.setItem('token' , resp.data.token)
+                const inr_token = resp.data.token
+                setToken(inr_token)
+                localStorage.setItem('token', inr_token)
+                const token = localStorage.getItem('token'); // Retrieve token from localStorage
+
+                const response = await axios.post(
+                    'http://localhost:5000/api/user/get_userImg',  // API endpoint
+                    {},  // Empty body for this request
+                    {
+                        headers: {
+                            Authorization: `${token}`  // Set the Authorization header with Bearer token
+                        }
+                    }
+                );
+                if(response.data.success){
+                    localStorage.setItem('user_img', response.data.user_img)
+                    setUser_img(response.data.user_img)
+                }
             }
             else {
                 window.alert(resp.data.message)
                 setU_data({
-                    u_email : '',
-                    u_password : ''
+                    u_email: '',
+                    u_password: ''
                 })
             }
         } catch (e) {

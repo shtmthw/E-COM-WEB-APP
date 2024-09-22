@@ -1,8 +1,8 @@
-import React, { useState , useContext} from 'react'
+import React, { useState, useContext } from 'react'
 import axios from 'axios'
 import { StoreContext } from '../../globalcontex/store_contex_GLB'
 function Login({ setLog }) {
-    const { token, setToken } = useContext(StoreContext)
+    const { token, setToken, user_img, setUser_img } = useContext(StoreContext)
 
     const [u_data, setU_data] = useState({
         u_email: '',
@@ -34,6 +34,20 @@ function Login({ setLog }) {
                     u_email: '',
                     u_password: ''
                 });
+                const token = resp.data.token
+                const response = await axios.post(
+                    'http://localhost:5000/api/user/get_userImg',  // API endpoint
+                    {},  // Empty body for this request
+                    {
+                        headers: {
+                            Authorization: `${token}`  // Set the Authorization header with Bearer token
+                        }
+                    }
+                );
+                if (response.data.success) {
+                    localStorage.setItem('user_img', response.data.user_img)
+                    setUser_img(response.data.user_img)
+                }
             } else {
                 window.alert(resp.data.message);
                 setU_data({

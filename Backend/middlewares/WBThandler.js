@@ -1,22 +1,29 @@
-import WBT from 'jsonwebtoken'
-export const WTC_DECR = async(req , res) => {
- 
-    try{
-        const web_token = req.header
+import WBT from 'jsonwebtoken';
 
-        if(!web_token){
-            res.json({success : false , message : 'No Token Recived By The Backend'})
+export const WTC_DECR = async (req, res, next) => {
+    try {
+        // Extract the Authorization header
+        const token = req.headers['authorization'];
+        
+        // Check if the Authorization header is present
+        if (!token) {
+            return res.status(401).json({ success: false, message: 'No token received by the backend' });
         }
-        else{
-            const decrypted_token = WBT.verify(web_token , process.env.JWT_SECRET)
-            // stuff underneath depends on what you want to do w the decrypted token!!
-            req.body.userID = decrypted_token._id
-            
-            res.json({success : true , message : decrypted_token})
-            
-        }
-    
-    }catch(e){
-        res.json({success : false , message : e})
+        
+        // Extract the token part (remove the 'Bearer ' prefix)
+
+        // If there's no token after 'Bearer '
+
+        // Verify the token
+        const decrypted_token = await WBT.verify(token, process.env.JWT_SECRET);
+
+        // Do something with the decrypted token (e.g., attach user data to the request)
+        req.body.userID = decrypted_token.id;
+
+        // Pass control to the next middleware or route
+        next();
+    } catch (e) {
+        // Handle JWT errors such as token expiration or invalid token
+        res.status(403).json({ success: false, message: e.message });
     }
-}
+};

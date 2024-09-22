@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import item_route from './routes/item_routes.js';
 import user_routes from './routes/user_routes.js';
 import { DB } from './config/db.js';
+import { WTC_DECR } from './middlewares/WBThandler.js';
 const app = express()
 import dotenv from 'dotenv';
 dotenv.config();
@@ -19,7 +20,7 @@ app.use(express.json())
 app.use(cors({
     origin: 'http://localhost:5173', // Allow your frontend's origin
     methods: 'GET,POST,PUT,DELETE',
-    allowedHeaders: 'Content-Type,Authorization , token'
+    allowedHeaders: 'Content-Type,Authorization , token , inr_token'
 }));
 
 
@@ -31,7 +32,7 @@ app.get('/' , (req , res)=>{
 app.use('/api/items' , item_route)
 app.use('/api/user' , user_routes)
 app.use('/item_images' , express.static(path.join(__dirname , 'item_images')))
-app.use('/user_images' , express.static(path.join(__dirname , 'user_images')))
+app.use('/user_images' ,  express.static(path.join(__dirname , 'user_images')))
 
 app.listen(port,()=>{
     console.log('server is on')
