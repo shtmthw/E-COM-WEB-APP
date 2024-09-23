@@ -1,0 +1,217 @@
+/* Main container styling */
+.main {
+  width: 100%;
+  background-color: #f8f9fa; /* Light background */
+  padding: 10px 0;
+}
+
+/* Navigation operations container */
+.nav-ops {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1400px;  /* Adjusted width for a large monitor */
+  margin: 0 auto;
+  padding: 0 50px; /* Added padding for spacing */
+}
+
+/* Top navigation bar styling */
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* User profile and logout/login section */
+.user {
+  display: flex;
+  align-items: center;
+  gap: 170px;
+  /* margin-top: -35px; */
+}
+
+/* Styling for the logo in the center */
+.site-logo {
+  margin: 0 auto; /* Center the logo */
+}
+
+/* Search and cart logos aligned to the right */
+.search-logo,
+.cart-logo {
+  cursor: pointer;
+}
+
+/* Profile image styling */
+.profile_img {
+  border-radius: 50%; /* Circular profile image */
+  cursor: pointer;
+  border: 2px solid #ddd; /* Light border */
+}
+
+/* User control buttons for Register/Login */
+.user_control {
+  background-color: #007bff; /* Blue background */
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  margin: 0 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Styling for logout button */
+.logout-button {
+  background-color: #ff4b4b; /* Red background */
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  /* Reduce the gap on smaller large screens */
+  .user {
+    gap: 100px;
+  }
+
+  .nav-ops {
+    padding: 0 30px; /* Reduce padding on smaller large screens */
+  }
+}
+
+@media (max-width: 1302px) {
+  /* Stack the navigation vertically */
+
+
+  /* Adjust profile and control buttons */
+  .user {
+    /* flex-direction: column; */
+    gap: 170px;
+  }
+
+  .site-logo {
+    width: 200px;
+  }
+
+  .search-logo,
+  .cart-logo {
+    width: 50px;
+  }
+
+  .profile_img {
+    width: 100px;
+  }
+
+  .logout-button {
+    padding: 8px 20px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 1238px) {
+  /* Further stacking for tablet-size screens */
+  .nav-ops {
+    /* flex-direction: column; */
+    padding: 0 20px;
+  }
+
+  .user {
+    /* flex-direction: column; */
+    gap: 165px;
+  }
+
+  .site-logo {
+    width: 180px;
+  }
+
+  .search-logo,
+  .cart-logo {
+    width: 45px;
+  }
+
+  .profile_img {
+    width: 80px;
+  }
+
+  .logout-button {
+    font-size: 14px;
+    padding: 6px 18px;
+  }
+}
+
+@media (max-width: 1181px) {
+  /* Small mobile adjustments */
+  .user{
+    gap: 160px;
+  }
+  .nav-ops {
+    padding: 0 10px;
+  }
+
+  .site-logo {
+    width: 150px;
+  }
+
+  .search-logo,
+  .cart-logo {
+    width: 40px;
+  }
+
+  .profile_img {
+    width: 70px;
+  }
+
+  .logout-button {
+    font-size: 12px;
+    padding: 5px 15px;
+  }
+
+  .user_control {
+    font-size: 12px;
+    padding: 5px 12px;
+  }
+}
+@media (max-width: 1041px) {
+    .user{
+      gap: 140px;
+    }
+}
+@media (max-width: 941px) {
+  .user{
+    gap: 120px;
+  }
+}
+@media (max-width: 841px) {
+  .user{
+    gap: 100px;
+  }
+}
+@media (max-width: 799px) {
+  .user{
+    gap: 80px;
+  }
+}
+@media (max-width: 740px) {
+  .user{
+    gap: 60px;
+  }
+}
+@media (max-width: 620px) {
+  .user{
+    gap: 40px;
+  }
+}
+@media (max-width: 580px) {
+  .user{
+    gap: 20px;
+  }
+}
+@media (max-width: 480px) {
+  .user{
+    gap: 10px;
+  }
+}

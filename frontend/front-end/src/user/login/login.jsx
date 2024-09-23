@@ -1,6 +1,8 @@
 import React, { useState, useContext } from 'react'
 import axios from 'axios'
 import { StoreContext } from '../../globalcontex/store_contex_GLB'
+import './login.css' // Adding custom CSS for the popup modal
+
 function Login({ setLog }) {
     const { token, setToken, user_img, setUser_img } = useContext(StoreContext)
 
@@ -19,10 +21,9 @@ function Login({ setLog }) {
         try {
             event.preventDefault();
 
-            // Sending as JSON, no need for FormData
             const resp = await axios.post('http://localhost:5000/api/user/login', u_data, {
                 headers: {
-                    'Content-Type': 'application/json',  // Explicitly set JSON header
+                    'Content-Type': 'application/json',
                 },
             });
 
@@ -36,11 +37,11 @@ function Login({ setLog }) {
                 });
                 const token = resp.data.token
                 const response = await axios.post(
-                    'http://localhost:5000/api/user/get_userImg',  // API endpoint
-                    {},  // Empty body for this request
+                    'http://localhost:5000/api/user/get_userImg', 
+                    {}, 
                     {
                         headers: {
-                            Authorization: `${token}`  // Set the Authorization header with Bearer token
+                            Authorization: `${token}`  
                         }
                     }
                 );
@@ -60,24 +61,34 @@ function Login({ setLog }) {
         }
     }
 
-
     return (
-        <>
-            <div className="main">
-                <h2 onClick={() => {
-                    setLog(false)
-                }}>X</h2>
+        <div className="login-popup-overlay">
+            <div className="login-popup">
+                <h2 className="close-btn" onClick={() => setLog(false)}>X</h2>
                 <div className="form-body">
-                    <form action="" onSubmit={handle_login}>
-                        <input type="email" name='u_email' value={u_data.u_email} onChange={onchangehandler} />
-                        <input type="password" name='u_password' value={u_data.u_password} onChange={onchangehandler} />
-
-                        <button type='submit'>Login</button>
+                    <form onSubmit={handle_login}>
+                        <input 
+                            type="email" 
+                            name='u_email' 
+                            placeholder="Email" 
+                            value={u_data.u_email} 
+                            onChange={onchangehandler} 
+                            required
+                        />
+                        <input 
+                            type="password" 
+                            name='u_password' 
+                            placeholder="Password" 
+                            value={u_data.u_password} 
+                            onChange={onchangehandler} 
+                            required
+                        />
+                        <button type='submit' className="login-btn">Login</button>
                     </form>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 
-export default Login
+export default Login;
