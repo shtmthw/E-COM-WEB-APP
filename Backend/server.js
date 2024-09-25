@@ -15,12 +15,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
+
 app.use(express.json())
 
 app.use(cors({
     origin: 'http://localhost:5173', // Allow your frontend's origin
     methods: 'GET,POST,PUT,DELETE',
-    allowedHeaders: 'Content-Type,Authorization , token , inr_token'
+    allowedHeaders: 'Content-Type,Authorization , token , inr_token ,  UP_token'
 }));
 
 
