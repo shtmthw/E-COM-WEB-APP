@@ -4,7 +4,7 @@ export const StoreContext = createContext(null)
 
 const StoreContProv = (props) => {
     
-    const [token , setToken] = useState(null)
+    const [token , setToken] = useState("")
     const [user_img , setUser_img] = useState("")
     useEffect(()=>{
         if(localStorage.getItem('token') && localStorage.getItem('user_img')){
@@ -12,6 +12,11 @@ const StoreContProv = (props) => {
             setUser_img(localStorage.getItem('user_img'))
         }
     },[])
+    // useEffect(()=>{
+    //     if(localStorage.getItem('user_img')){
+    //         setUser_img(localStorage.getItem('user_img'))
+    //     }
+    // },[user_img])
 
     const contextval = {
         token,

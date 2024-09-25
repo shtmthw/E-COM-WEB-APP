@@ -47,13 +47,18 @@ function Register({ setReg }) {
                 if (response.data.success) {
                     localStorage.setItem('user_img', response.data.user_img);
                     setUser_img(response.data.user_img);
+                }else{
+                     window.alert(resp.data.message);
                 }
                 setReg(false); // Close the Register form
             } else {
                 window.alert(resp.data.message);
+
             }
         } catch (e) {
             console.log(e);
+            window.alert(`${e.response.data.message}`);
+
         }
     };
 
