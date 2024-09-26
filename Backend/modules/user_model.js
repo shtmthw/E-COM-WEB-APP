@@ -21,6 +21,6 @@ const user_schema = new mong.Schema({
 }, { minimize: false });
 
 
-const user_module = mong.model.user || new mong.model('user' , user_schema)
+const user_module = mong.models.user || new mong.model('user' , user_schema)
 
 export default user_module

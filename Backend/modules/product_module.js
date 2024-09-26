@@ -1,23 +1,34 @@
-import mong from 'mongoose'
+import mongoose from 'mongoose';
 
-const product_schema = new mong.Schema({
+const product_schema = new mongoose.Schema({
     name: {
-        type : String
+        type: String,
+        required: true // Add required validation if name should be mandatory
     },
     category: {
-        type : String
+        type: String,
+        required: true
     },
     price: {
-        type : Number
+        type: Number,
+        required: true,
+        min: 0 // Ensure price is not negative
     },
     image: {
-        type : String
+        type: String,
+        required: true
     },
     desc: {
-        type : String
+        type: String,
+        required: true
+    },
+    total_bought: {
+        type: Number,
+        default: 0
     }
-})
+});
 
-const product_model = mong.model.product || mong.model( 'product' , product_schema)
+// Use mongoose.model('ModelName', schema) correctly
+const product_model = mongoose.models.product || mongoose.model('product', product_schema);
 
-export default product_model
+export default product_model;

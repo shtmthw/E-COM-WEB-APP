@@ -18,6 +18,7 @@
     object-fit: cover; /* Ensures the image covers the space without distorting */
     opacity: 0.7; /* Add a slight opacity to make the text stand out */
     border-radius: 10px; /* Slightly rounded corners for a modern look */
+    box-shadow: 4px 6px 10px black;
   }
   
   .Main-Intro-div h3,
@@ -36,7 +37,9 @@
     font-weight: bold;
     margin: 0;
   }
-  
+  .Main-Intro-di img{
+
+  }
   .Main-Intro-div p {
     font-size: 1.2rem; /* Smaller paragraph text */
     margin-top: 10px;

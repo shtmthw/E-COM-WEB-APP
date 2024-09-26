@@ -8,6 +8,8 @@ import { DB } from './config/db.js';
 import { WTC_DECR } from './middlewares/WBThandler.js';
 const app = express()
 import dotenv from 'dotenv';
+import order_routes from './routes/order_routes.js';
+import cart_routes from './routes/cart_routes.js';
 dotenv.config();
 const port = 5000
 
@@ -32,6 +34,9 @@ app.get('/' , (req , res)=>{
 })
 app.use('/api/items' , item_route)
 app.use('/api/user' , user_routes)
+app.use('/api/order' , order_routes)
+app.use('/api/cart' , cart_routes)
+
 app.use('/item_images' , express.static(path.join(__dirname , 'item_images')))
 app.use('/user_images' ,  express.static(path.join(__dirname , 'user_images')))
 
