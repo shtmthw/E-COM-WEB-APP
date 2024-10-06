@@ -102,7 +102,7 @@ function My_cart() {
                     console.log(resp_2.data.message);
                 }
             } else {
-                window.alert("Error placing order, check console");
+                window.alert(resp.data.message);
                 console.log(resp.data.message);
             }
         } catch (e) {
@@ -122,6 +122,7 @@ function My_cart() {
                         placeholder="Enter Address"
                         value={userInfo.address}
                         onChange={onChangehandler}
+                        required
                     />
                     <input
                         type="email"
@@ -129,6 +130,7 @@ function My_cart() {
                         placeholder="Enter Email"
                         value={userInfo.email}
                         onChange={onChangehandler}
+                        required
                     />
                     <button className="btn" onClick={confirmCheckOut}>Confirm Order</button>
                 </div>

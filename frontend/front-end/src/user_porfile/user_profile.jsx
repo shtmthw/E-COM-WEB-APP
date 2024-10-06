@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { StoreContext } from '../globalcontex/store_contex_GLB';
+import { useNavigate } from 'react-router-dom';
 import './user_profile.css';
 import axios from 'axios';
 
@@ -12,6 +13,7 @@ function User_profile() {
         name: "",
         email: "",
     });
+    const Navigator = useNavigate()
 
     // Handle user image update
     const handleUpdate = async (form_data) => {
@@ -127,7 +129,6 @@ function User_profile() {
         <div className='main_User_Profile'>
             {showUP ? (
                 <>
-                    <h2 className='intro'>Your Profile</h2>
                     <div className="profile-container">
                         <div className="profile-info">
                             <div className="profile-image-label">Profile Picture</div>
@@ -140,6 +141,11 @@ function User_profile() {
                                 <input type='file' onChange={(e) => setImage(e.target.files[0])} className='img' name='profilePic' required />
                                 <input type="submit" value="Update Profile" className='update-button' />
                             </form>
+                            <div className="check_orders_btn">
+                                <button className='update-button' onClick={()=>{
+                                   Navigator('/my_orders')
+                                }} style={{backgroundColor : "orange" , padding: '14px' , margin : '20px' , marginLeft : "2.5px" }}>My Orders</button>
+                            </div>
                         </div>
                     </div>
                 </>

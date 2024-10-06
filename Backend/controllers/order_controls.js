@@ -21,7 +21,11 @@ export const order_placement = async (req, res) => {
     try {
         const { item, amount, address,userID,email } = req.body
 
-        if (!item || !address || !amount || !userID) {
+        if(amount < 25){
+            return res.json({ success: false, message: 'Order Must Be Above 25$' })
+        }
+
+        if (!item || !address || !amount || !userID|| !email) {
             return res.json({ success: false, message: 'Every Order Data Is Not Sent!!' })
         }
 
@@ -33,7 +37,7 @@ export const order_placement = async (req, res) => {
             userID: userID,
             items: item,
             email: email,
-            amount: amount,
+            amount: amount ,
             address: address
         })
 
@@ -42,7 +46,7 @@ export const order_placement = async (req, res) => {
 
         const line_item = item.map((item) => ({
             price_data: {
-                currency: 'BDT',
+                currency: 'usd',
                 product_data: {
                     name: item.name,
                 },
@@ -53,7 +57,7 @@ export const order_placement = async (req, res) => {
 
         line_item.push({
             price_data: {
-                currency: 'BDT',
+                currency: 'usd',
                 product_data: {
                     name: 'Delivery Charges',
                 },
@@ -160,11 +164,21 @@ export const send_orders = async (req, res) => {
 // use in user frontend
 export const fetch_singleUser_order = async (req, res) => {
     try {
+        const {userID} = req.body
+        if(!userID){
+            return res.status(200).json({ success: false, message: 'User ID wasnt recived!' });
+        }
+        const userWithProviedID = await user_module.findById(userID)
+        if(!userWithProviedID){
+            return res.status(200).json({ success: false, message: 'User ID Doesnt Exist In the DataBase!' });
+        }
         const orders_by_user = await order_module.find({ userID: req.body.userID });
-        if (orders_by_user.length === 0) {
-            res.status(200).json({ success: false, message: 'No Orders Placed!' });
+    
+        if (!orders_by_user.length > 0) {
+            return res.status(200).json({ success: false , message: 'No Orders Placed!' });
 
         }
+
         res.status(200).json({ success: true, message: 'Orders Fetched!', orders: orders_by_user });
     } catch (e) {
         console.error('Error fetching orders:', e);
@@ -176,6 +190,15 @@ export const fetch_singleUser_order = async (req, res) => {
 // Use in logistics panel to handle order status
 export const handle_order_status = async (req, res) => {
     const { newStatus, orderID } = req.body;
+
+    if(!newStatus){
+        return res.json({ success: false, message: 'No Order Status provided.' });
+    }
+
+    if(typeof(newStatus) !== 'string'){
+        return res.json({ success: false, message: 'No Order Status Must be A String.' });
+    }
+    const recivedOrderstatus = newStatus
 
     // Check if orderID is provided
     if (!orderID) {
@@ -191,8 +214,10 @@ export const handle_order_status = async (req, res) => {
     }
 
     // Update the order status
-    order.status = newStatus;
+    order.status = recivedOrderstatus;
     await order.save();
 
     return res.json({ success: true, message: 'Order status updated!' });
 }
+
+

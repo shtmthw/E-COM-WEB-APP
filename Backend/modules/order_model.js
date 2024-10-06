@@ -13,6 +13,11 @@ const order_schema = new mong.Schema({
         type : Number,
         required : true
     },
+    email: {
+        type : String,
+        required : true
+    },
+
     address : {
         type : Object,
         required : true
