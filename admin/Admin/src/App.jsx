@@ -1,33 +1,29 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import Home from './home/home'
+import { Route, Routes  } from 'react-router-dom'
+import Item_adding from './item_handling/item_addition/ia'
+import Add_category from './category_handling/add_category'
+import Item_list from './item_handling/item_list/get_items'
+import DSA from './item_handling/item_list/dsa_q-1(Delete later)'
+import Get_delete_categories from './category_handling/del & get_categories'
+import Get_order from './order_handling/get_orders'
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <h1>--Imagine Navbar here--</h1>
+     <div>
+     <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/add_item' element={<Item_adding />} />
+          <Route path='/add_category' element={<Add_category />} />
+          <Route path='/item_list' element={<Item_list />} />
+          <Route path='/DSA' element={<DSA />} />
+          <Route path='/category_list' element={<Get_delete_categories />} /> {/* Useless, just for some DSA test and revision :) */}
+          <Route path='/order_list' element={<Get_order/>} /> {/* Useless, just for some DSA test and revision :) */}
+        
+        </Routes>
+     </div>
     </>
   )
 }

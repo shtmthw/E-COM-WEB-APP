@@ -2,7 +2,6 @@ import order_module from "../modules/order_model.js";
 import user_module from "../modules/user_model.js";
 import { Stripe } from 'stripe'
 import nodemailer from 'nodemailer'
-
 const transporter = nodemailer.createTransport({
     service: "Gmail",
     host: "smtp.gmail.com",
@@ -14,25 +13,26 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-const stripe = new Stripe(process.env.STRIPE_SEC_KEY);
-
-
+const frontend_url = 'http://localhost:5173'
+// used for user to place orders,use in frontend
 export const order_placement = async (req, res) => {
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
     try {
+        const { item, amount, address,userID,email } = req.body
 
-        const { items, amount, address, quantity, userID } = req.body
-
-        if (!items || !amount || !address || !quantity || !userID) {
+        if (!item || !address || !amount || !userID) {
             return res.json({ success: false, message: 'Every Order Data Is Not Sent!!' })
         }
 
-        if (!Array.isArray(items)) {
+        if (!Array.isArray(item)) {
             return res.json({ success: false, message: 'Items Is Not An Array!!' })
         }
 
         const new_order = await new order_module({
             userID: userID,
-            items: items,
+            items: item,
+            email: email,
             amount: amount,
             address: address
         })
@@ -40,7 +40,7 @@ export const order_placement = async (req, res) => {
         await new_order.save()
         await user_module.findByIdAndUpdate(userID, { cartObj: {} });
 
-        const line_item = items.map((item) => ({
+        const line_item = item.map((item) => ({
             price_data: {
                 currency: 'BDT',
                 product_data: {
@@ -71,11 +71,30 @@ export const order_placement = async (req, res) => {
         res.json({ success: true, session_url: session.url });
 
 
-    } catch (e) {
-        return res.json({ success: false, message: e })
+    } catch (erorr) {
+        return res.json({ success: false, message: erorr })
 
     }
 
+}
+
+export const Order_paymentVerificaiton =async( req , res )=>{
+    try{
+        const { orderID } = req.body
+        if(!orderID){
+            return res.json({success : false , message: 'No OderID Found'})
+        }
+        const order = await order_module.findById(orderID)
+        if(!order){
+            return res.json({success : false , message: 'No Oder With This ID Found'})
+        }
+        order.payment = true
+        await order.save()
+        return res.json({success : true , message: 'Payment Successful'})
+    }
+    catch(e){
+        console.log(e)
+    }
 }
 
 
@@ -86,7 +105,7 @@ export const order_confirmation = async (req, res) => {
         if (!orderID) {
             return res.json({ success: false, message: "No Order ID Received!" });
         }
-        
+
         const order = await order_module.findById(orderID);
         if (order) {
             order.status = 'Order Has Been Confirmed!';
@@ -141,17 +160,17 @@ export const send_orders = async (req, res) => {
 // use in user frontend
 export const fetch_singleUser_order = async (req, res) => {
     try {
-      const orders_by_user = await order_module.find({ userID: req.body.userID });
-      if(orders_by_user.length === 0){
-        res.status(200).json({ success: false, message: 'No Orders Placed!' });
+        const orders_by_user = await order_module.find({ userID: req.body.userID });
+        if (orders_by_user.length === 0) {
+            res.status(200).json({ success: false, message: 'No Orders Placed!' });
 
-      }
-      res.status(200).json({ success: true, message : 'Orders Fetched!',orders: orders_by_user });
+        }
+        res.status(200).json({ success: true, message: 'Orders Fetched!', orders: orders_by_user });
     } catch (e) {
-      console.error('Error fetching orders:', e);
-      res.status(500).json({ success: false, message: 'Failed to fetch orders' });
+        console.error('Error fetching orders:', e);
+        res.status(500).json({ success: false, message: 'Failed to fetch orders' });
     }
-  };
+};
 
 
 // Use in logistics panel to handle order status
@@ -174,6 +193,6 @@ export const handle_order_status = async (req, res) => {
     // Update the order status
     order.status = newStatus;
     await order.save();
-    
+
     return res.json({ success: true, message: 'Order status updated!' });
 }

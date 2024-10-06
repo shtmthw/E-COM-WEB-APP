@@ -3,10 +3,12 @@ import Introduction from '../home_comps/Introduction/introduction';
 import Item_Surf from '../home_comps/item_surf/item-1';
 import Item_Surf2 from '../home_comps/item_surf/item-2';
 import Item_Surf3 from '../home_comps/item_surf/item-3';
+import Product_view from '../product/product_view';
 import './home.css'; // Import the CSS file
 
 function Home() {
   const [imagestate, setImagestate] = useState(1); // Track the state
+
 
   // Handler for the button click to change state
   const handleClick = () => {
@@ -41,6 +43,11 @@ function Home() {
       <div className="btn-cnt">
       <button className="button-17" onClick={handleClick}>Next</button>
 
+      </div>
+      <div className="products_cont">
+        {/* Use the product comp here */}
+        <h2 className='item_h2'>The Items Of Our Domain</h2>
+        {<Product_view/>}
       </div>
     </div>
   );

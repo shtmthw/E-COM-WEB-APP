@@ -10,6 +10,7 @@ const app = express()
 import dotenv from 'dotenv';
 import order_routes from './routes/order_routes.js';
 import cart_routes from './routes/cart_routes.js';
+import category_routes from './routes/category_routes.js';
 dotenv.config();
 const port = 5000
 
@@ -23,7 +24,7 @@ app.use(express.json())
 app.use(cors({
     origin: 'http://localhost:5173', // Allow your frontend's origin
     methods: 'GET,POST,PUT,DELETE',
-    allowedHeaders: 'Content-Type,Authorization , token , inr_token ,  UP_token'
+    allowedHeaders: 'Content-Type,Authorization , token , inr_token ,  UP_token , user_tok'
 }));
 
 
@@ -36,6 +37,7 @@ app.use('/api/items' , item_route)
 app.use('/api/user' , user_routes)
 app.use('/api/order' , order_routes)
 app.use('/api/cart' , cart_routes)
+app.use('/api/category' , category_routes)
 
 app.use('/item_images' , express.static(path.join(__dirname , 'item_images')))
 app.use('/user_images' ,  express.static(path.join(__dirname , 'user_images')))

@@ -39,11 +39,13 @@ export const fetch_items = async(req , res)=>{
 export const del_item = async(req , res) => {
     try{
         const { itemID }= req.body
-        const resp = await product_model.findById(itemID)
         if(!itemID){
             return res.json({success : false , message: 'No Item Id Recieved!'})
         }
+        const resp = await product_model.findById(itemID)
         if(resp){
+            await fs.access(`item_images/${resp.image}`); 
+            await fs.unlink(`item_images/${resp.image}`);
             await product_model.findByIdAndDelete(itemID)
             return res.json({success : true , message: 'Successfully Removed Item!'})
         }
@@ -66,23 +68,26 @@ export const update_item_ordered_amnt = async (req, res) => {
             return res.status(400).json({ success: false, message: 'No Item IDs received!' });
         }
 
-        // Iterate over each item in the array and update its total_bought field
-        const updatePromises = itemIDs.map(async (obj) => {
-            const itemID = obj.itemID; // Extract itemID from the object
+        // Create an array to hold the promises for updating each item
+        const updatePromises = [];
 
-            // Find the item by ID
-            const item = await product_model.findOne({ itemID });
+        for (let i = 0; i < itemIDs.length; i++) {
+            const id = itemIDs[i].itemID;
+            // Push each update operation into the promises array
+            updatePromises.push(
+                product_model.findById(id).then(async (item) => {
+                    if (item) {
+                        item.total_bought += 1;
+                        await item.save(); // Save the updated item
+                        return { success: true, message: `Successfully updated item with ID: ${id}` };
+                    } else {
+                        return { success: false, message: `Item not found with ID: ${id}` };
+                    }
+                })
+            );
+        }
 
-            if (item) {
-                item.total_bought += 1; // Increment the total_bought field
-                await item.save(); // Save the updated item
-                return { success: true, message: `Successfully updated item with ID: ${itemID}` };
-            } else {
-                return { success: false, message: `Item not found with ID: ${itemID}` };
-            }
-        });
-
-        // Wait for all the updates to complete
+        // Wait for all promises to resolve using Promise.all
         const results = await Promise.all(updatePromises);
 
         // Return the aggregated results

@@ -5,8 +5,8 @@ export const add_item_incart = async (req, res) => {
 
     try {
         const { userID, itemID } = req.body
-        if (!userID) {
-            return res.json({ success: false, message: 'No UserID Recieved!!' })
+        if (!userID || !itemID) {
+            return res.json({ success: false, message: 'No UserID or itemID Recieved!!' })
         }
         const user = await user_module.findById(userID)
         if (user) {

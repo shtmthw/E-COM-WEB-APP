@@ -35,7 +35,7 @@ function Navbar() {
                                 }} src={search} alt="" className="search-logo" width={70} />
 
                                 <img onClick={() => {
-                                    navigate('/cart')
+                                    navigate('/my_cart')
                                 }} src={cart} alt="" className="cart-logo" width={50} />
 
                                 <img onClick={() => {

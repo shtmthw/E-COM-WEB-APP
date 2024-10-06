@@ -26,7 +26,7 @@
 .user {
   display: flex;
   align-items: center;
-  gap: 170px;
+  gap: 200px;
   /* margin-top: -35px; */
 }
 
@@ -74,17 +74,29 @@
   border-radius: 5px;
   cursor: pointer;
 }
+.profile_img{
+  width: 60px;
+  height: 60px;
+}
+
 
 /* Responsive adjustments */
+
+@media (max-width: 1430px) {
+  .user{
+    gap: 170px;
+  }
+}
 @media (max-width: 1200px) {
   /* Reduce the gap on smaller large screens */
   .user {
-    gap: 100px;
+    gap: 10px;
+  }
+  .profile_img{
+    width: 60px;
+    height: 60px;
   }
 
-  .nav-ops {
-    padding: 0 30px; /* Reduce padding on smaller large screens */
-  }
 }
 
 @media (max-width: 1302px) {
@@ -98,7 +110,7 @@
   }
 
   .site-logo {
-    width: 200px;
+    width: 160px;
   }
 
   .search-logo,
@@ -106,8 +118,10 @@
     width: 50px;
   }
 
-  .profile_img {
-    width: 100px;
+
+  .profile_img{
+    width: 60px;
+    height: 60px;
   }
 
   .logout-button {
@@ -150,7 +164,7 @@
 @media (max-width: 1181px) {
   /* Small mobile adjustments */
   .user{
-    gap: 160px;
+    gap: 120px;
   }
   .nav-ops {
     padding: 0 10px;
@@ -165,9 +179,7 @@
     width: 40px;
   }
 
-  .profile_img {
-    width: 70px;
-  }
+
 
   .logout-button {
     font-size: 12px;
@@ -178,44 +190,80 @@
     font-size: 12px;
     padding: 5px 12px;
   }
+  .profile_img{
+    width: 60px;
+    height: 60px;
+  }
 }
 @media (max-width: 1041px) {
     .user{
-      gap: 140px;
+      gap: 110px;
+    }
+    .profile_img{
+      width: 60px;
+      height: 60px;
     }
 }
 @media (max-width: 941px) {
   .user{
-    gap: 120px;
+    gap: 100px;
+  }
+  .profile_img{
+    width: 60px;
+    height: 60px;
   }
 }
 @media (max-width: 841px) {
   .user{
-    gap: 100px;
+    gap: 90px;
+  }
+  .profile_img{
+    width: 60px;
+    height: 60px;
   }
 }
 @media (max-width: 799px) {
   .user{
     gap: 80px;
   }
+  .profile_img{
+    width: 60px;
+    height: 60px;
+  }
 }
 @media (max-width: 740px) {
   .user{
-    gap: 60px;
+    gap: 40px;
+  }
+  .profile_img{
+    width: 60px;
+    height: 60px;
   }
 }
 @media (max-width: 620px) {
   .user{
     gap: 40px;
   }
+  .profile_img{
+    width: 60px;
+    height: 60px;
+  }
 }
 @media (max-width: 580px) {
   .user{
-    gap: 20px;
+    gap: 10px;
+  }
+  .profile_img{
+    width: 50px;
+    height: 50px;
   }
 }
 @media (max-width: 480px) {
   .user{
     gap: 10px;
+  }
+  .profile_img{
+    width: 50px;
+    height: 50px;
   }
 }
