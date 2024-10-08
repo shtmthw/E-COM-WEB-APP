@@ -6,55 +6,55 @@ import validator from 'validator';
 import path from 'path';
 import product_model from "../modules/product_module.js";
 
-export const add_itemm = async(req , res)=>{
-    const {name, price , desc , category} = req.body
+export const add_itemm = async (req, res) => {
+    const { name, price, desc, category } = req.body
     const image_name = req.file ? req.file.filename : null;
-    if(!name || !price || !desc || !category){
-        return res.json({success : false , message: 'Item Info Not Recived!'})
+    if (!name || !price || !desc || !category) {
+        return res.json({ success: false, message: 'Item Info Not Recived!' })
     }
-    if(!image_name){
-        return res.json({success : false , message: 'Item Image Not Recived!'})
+    if (!image_name) {
+        return res.json({ success: false, message: 'Item Image Not Recived!' })
     }
     const new_item = await new product_model({
-        name : name,
-        category : category,
-        price : price,
-        image : image_name,
+        name: name,
+        category: category,
+        price: price,
+        image: image_name,
         desc: desc,
     })
     await new_item.save()
-    return res.json({success : true , message: 'Item Added!'})
+    return res.json({ success: true, message: 'Item Added!' })
 }
 
-export const fetch_items = async(req , res)=>{
-    try{
+export const fetch_items = async (req, res) => {
+    try {
         const resp = await product_model.find({})
-        return res.json({success : true , message: 'Successfully Fetched Every Items!' , items : resp})
+        return res.json({ success: true, message: 'Successfully Fetched Every Items!', items: resp })
 
-    }catch(e){
-        res.json({success : false , message : 'Error Fetching Every Items!!'})
+    } catch (e) {
+        res.json({ success: false, message: 'Error Fetching Every Items!!' })
     }
 }
 
-export const del_item = async(req , res) => {
-    try{
-        const { itemID }= req.body
-        if(!itemID){
-            return res.json({success : false , message: 'No Item Id Recieved!'})
+export const del_item = async (req, res) => {
+    try {
+        const { itemID } = req.body
+        if (!itemID) {
+            return res.json({ success: false, message: 'No Item Id Recieved!' })
         }
         const resp = await product_model.findById(itemID)
-        if(resp){
-            await fs.access(`item_images/${resp.image}`); 
+        if (resp) {
+            await fs.access(`item_images/${resp.image}`);
             await fs.unlink(`item_images/${resp.image}`);
             await product_model.findByIdAndDelete(itemID)
-            return res.json({success : true , message: 'Successfully Removed Item!'})
+            return res.json({ success: true, message: 'Successfully Removed Item!' })
         }
-        else{
-            return res.json({success : false , message: 'Item not found!'})
+        else {
+            return res.json({ success: false, message: 'Item not found!' })
         }
 
-    }catch(e){
-        return res.json({success : false , message: e})
+    } catch (e) {
+        return res.json({ success: false, message: e })
 
     }
 }
@@ -98,5 +98,26 @@ export const update_item_ordered_amnt = async (req, res) => {
         });
     } catch (error) {
         return res.status(500).json({ success: false, message: 'Error updating items', error });
+    }
+};
+export const get_mostBoughtProducts = async (req, res) => {
+    try {
+        const allProducts = await product_model.find({});
+        if (allProducts.length <= 0) {
+            return res.status(500).json({ success: false, message: 'No Items Found In DB' });
+        }
+
+        // Sort products based on total_bought
+        const sortedProducts = allProducts.sort((a, b) => b.total_bought - a.total_bought);
+        const topThreeItems = sortedProducts.slice(0, 3); // Get top three products
+
+        return res.status(200).json({
+            success: true,
+            message: 'Successfully fetched top bought products',
+            topThreeItemArr: topThreeItems // Ensure this property exists
+        });
+    } catch (error) {
+        console.error(error); // Log the error for debugging
+        return res.status(500).json({ success: false, message: 'Error getting top items', error });
     }
 };

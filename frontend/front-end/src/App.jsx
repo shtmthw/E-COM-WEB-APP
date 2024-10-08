@@ -6,6 +6,7 @@ import { Route, Routes } from 'react-router-dom'
 import My_cart from './cart/my_cart'
 import PaymentVerification from './payment_verification/paymentVerification'
 import UserorderDiplay from './orders/userOrdersDisplay'
+import CategoryViewAll from './home_comps/categories/categoryViewAll'
 function App() {
 
   return (
@@ -19,7 +20,8 @@ function App() {
           <Route path='/my_cart' element={<My_cart />} />
           <Route path='/verify' element={<PaymentVerification />} />
           <Route path='/my_orders' element={<UserorderDiplay />} />
-        
+          <Route path='/categories' element={<CategoryViewAll />} />
+       
         </Routes>
       </div>
 

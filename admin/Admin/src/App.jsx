@@ -4,7 +4,6 @@ import { Route, Routes  } from 'react-router-dom'
 import Item_adding from './item_handling/item_addition/ia'
 import Add_category from './category_handling/add_category'
 import Item_list from './item_handling/item_list/get_items'
-import DSA from './item_handling/item_list/dsa_q-1(Delete later)'
 import Get_delete_categories from './category_handling/del & get_categories'
 import Get_order from './order_handling/get_orders'
 function App() {
@@ -18,7 +17,6 @@ function App() {
           <Route path='/add_item' element={<Item_adding />} />
           <Route path='/add_category' element={<Add_category />} />
           <Route path='/item_list' element={<Item_list />} />
-          <Route path='/DSA' element={<DSA />} />
           <Route path='/category_list' element={<Get_delete_categories />} /> {/* Useless, just for some DSA test and revision :) */}
           <Route path='/order_list' element={<Get_order/>} /> {/* Useless, just for some DSA test and revision :) */}
         

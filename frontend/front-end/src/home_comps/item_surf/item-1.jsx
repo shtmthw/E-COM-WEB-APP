@@ -10,13 +10,7 @@ function Item_Surf() {
     <h3>Get The Best Of The Best Phones On Our Domain..</h3>
 
       <img className='cover' src={cover} alt="" />
-      {(()=>{
-        if(sfs==fsfs){
-          //fssf
-        }else if(fsfs = qst){
-          //rts
-        }
-      })}
+
     </div>
     </div>
   )

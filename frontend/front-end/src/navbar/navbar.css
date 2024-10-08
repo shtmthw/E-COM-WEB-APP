@@ -258,9 +258,9 @@
     height: 50px;
   }
 }
-@media (max-width: 480px) {
+@media (max-width: 460px) {
   .user{
-    gap: 10px;
+    gap: 0px;
   }
   .profile_img{
     width: 50px;

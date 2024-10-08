@@ -9,13 +9,7 @@ function Introduction() {
     <div className='Main-Intro-div'>
       <img className='cover' src={cover} alt="" />
       <h3>Get The Best Of The Best On Our Domain..</h3>
-      {(()=>{
-        if(sfs==fsfs){
-          //fssf
-        }else if(fsfs = qst){
-          //rts
-        }
-      })}
+
     </div>
     </div>
   )

@@ -4,6 +4,8 @@ import Item_Surf from '../home_comps/item_surf/item-1';
 import Item_Surf2 from '../home_comps/item_surf/item-2';
 import Item_Surf3 from '../home_comps/item_surf/item-3';
 import Product_view from '../product/product_view';
+import CategoryViewPratly from '../home_comps/categories/categoryViewPartly';
+import ReccomendedProducts from '../home_comps/reccomends/reccomendataions';
 import './home.css'; // Import the CSS file
 
 function Home() {
@@ -46,8 +48,34 @@ function Home() {
       </div>
       <div className="products_cont">
         {/* Use the product comp here */}
-        <h2 className='item_h2'>The Items Of Our Domain</h2>
+        <br />
+        <br />
+        <br />        
+        <br />
+        <br />
+        
+        <h2 className='item_h2'>The Items Of Our Domain.</h2>
+        <br />
+        <br />
+        <br />
         {<Product_view/>}
+        <br />
+        <br />
+        <h1 style={{textAlign : 'center' , fontSize : '35px'}}>Check Our Categoires.</h1>
+        <br />
+        {<CategoryViewPratly/>}
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+
+        <h1 style={{textAlign : 'center'}}>Our Top Rated Products.</h1>
+        <br />
+        <br />
+
+        <br />
+        <ReccomendedProducts/>
       </div>
     </div>
   );

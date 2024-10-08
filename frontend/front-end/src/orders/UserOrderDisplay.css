@@ -16,9 +16,6 @@
     transition: transform 0.2s; /* Smooth transform on hover */
 }
 
-.order-tile:hover {
-    transform: scale(1.05); /* Scale up on hover */
-}
 
 h2, h3, h4 {
     margin: 5px 0; /* Margin around headings */
