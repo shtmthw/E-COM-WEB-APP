@@ -1,7 +1,7 @@
 import express, { Router } from 'express'
 import multer from 'multer';
 const item_route = express.Router()
-import { add_itemm , fetch_items , del_item , update_item_ordered_amnt , get_mostBoughtProducts} from '../controllers/item_controls.js';
+import { add_itemm , fetch_items ,fetchSingleItems, getItemBySearch,del_item , update_item_ordered_amnt , get_mostBoughtProducts} from '../controllers/item_controls.js';
 
 // Configure Multer storage
 const storage = multer.diskStorage({
@@ -30,6 +30,9 @@ item_route.get('/getall_item' , fetch_items)
 item_route.post('/del_item' , del_item)
 item_route.post('/update_total_item_ordered_amnt' , update_item_ordered_amnt)
 item_route.get('/get_mostBoughtProducts' , get_mostBoughtProducts)
+item_route.post('/getItemBySearch' , getItemBySearch)
+item_route.post('/fetchSingleItems' , fetchSingleItems)
+
 
 
 

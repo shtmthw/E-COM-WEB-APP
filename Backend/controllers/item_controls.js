@@ -121,3 +121,69 @@ export const get_mostBoughtProducts = async (req, res) => {
         return res.status(500).json({ success: false, message: 'Error getting top items', error });
     }
 };
+
+
+export const getItemBySearch = async (req, res) => {
+    const { querySearch } = req.body;
+
+    if (!querySearch) {
+        return res.json({
+            success: false,
+            message: 'No Input Received From Frontend'
+        });
+    }
+
+    // Sanitize querySearch to avoid issues with regex special characters
+    const escapeRegex = (text) => text.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+    const sanitizedQuery = escapeRegex(querySearch);
+
+    try {
+        const getMatchingResults = await product_model.find({
+            name: { $regex: sanitizedQuery, $options: 'i' } // case-insensitive search
+        });
+
+        const productNames = []
+
+        getMatchingResults.map((item) => {
+            productNames.push({
+                name : item.name,
+                id : item._id
+            })
+        });
+
+        res.status(200).json({
+            success: true,
+            message: 'Successfully fetched product names',
+            productNames: productNames
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching product names',
+            error: error.message
+        });
+    }
+};
+
+
+export const fetchSingleItems = async(req , res)=>{
+    try{
+        const {itemID} = req.body
+        if(!itemID){
+            return res.json({success : false , message : 'No itemId Recieved!'})
+        }
+        const foundItem = await product_model.findById(itemID)
+        if(!foundItem){
+            return res.json({success : false , message : 'No item Found!'})
+        }
+        res.json({success : true , message : 'Item Successfully Fecthed!!' , singleItem : foundItem})
+    }catch(e){
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching product',
+            error: error.message
+        });
+    }
+}

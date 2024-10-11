@@ -1,12 +1,13 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import ProdRemDelHandling from "../../product/product_add & rem handling";
+import { useEffect,useContext, useState } from "react";
 import "./RecommendedProducts.css"; // Importing the CSS file
-
+import { StoreContext } from "../../globalcontex/store_contex_GLB";
+import { useNavigate } from "react-router-dom";
 function RecommendedProducts() {
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-
+    const { setCurrSearchedItem, currSearchedItem } = useContext(StoreContext)
+    const Navigator = useNavigate()
     const getMostBoughtProducts = async () => {
         try {
             const resp = await axios.get("http://localhost:5000/api/items/get_mostBoughtProducts");
@@ -38,7 +39,10 @@ function RecommendedProducts() {
         <div className="products-container"> {/* Updated container class */}
             <div className="product-names" style={{cursor : 'pointer',flexWrap : "wrap",display : "flex" , justifyContent : "center"}}> {/* New wrapper for names */}
                 {filteredProducts.map((item) => (
-                    <div className="prod_card" key={item._id}>
+                    <div className="prod_card"onClick={()=>{
+                        setCurrSearchedItem(item._id)
+                        Navigator(`/searchResult?itemID=${item._id}`)
+                    }} key={item._id}>
                         <h1>{item.name}</h1>
                         <h3>{item.category}</h3>
                         {/* <hr /> */}

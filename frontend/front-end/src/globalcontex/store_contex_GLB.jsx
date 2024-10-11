@@ -8,6 +8,9 @@ const StoreContProv = (props) => {
     const [token, setToken] = useState("")
     const [user_img, setUser_img] = useState("")
     const [cart, setCart] = useState({})
+    const [currSearchedItem , setCurrSearchedItem] = useState(null)
+
+    const [showSearchPopup , setShowSearchPopup] = useState(false)
 
     const fetch_user_cart = async (user_tok) => {
         try {
@@ -91,7 +94,6 @@ const StoreContProv = (props) => {
 
 
 
-
     useEffect(() => {
         if (localStorage.getItem('token') && localStorage.getItem('user_img')) {
             setToken(localStorage.getItem('token'))
@@ -110,7 +112,11 @@ const StoreContProv = (props) => {
         cart,
         setCart,
         add_item_inCart,
-        rem_itm_inCart
+        rem_itm_inCart,
+        currSearchedItem,
+        setCurrSearchedItem,
+        showSearchPopup,
+        setShowSearchPopup
     }
 
     return (
