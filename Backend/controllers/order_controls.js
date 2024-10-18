@@ -19,13 +19,13 @@ export const order_placement = async (req, res) => {
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
     try {
-        const { item, amount, address,userID,email } = req.body
+        const { item, amount, address, userID, email } = req.body
 
-        if(amount < 25){
+        if (amount < 25) {
             return res.json({ success: false, message: 'Order Must Be Above 25$' })
         }
 
-        if (!item || !address || !amount || !userID|| !email) {
+        if (!item || !address || !amount || !userID || !email) {
             return res.json({ success: false, message: 'Every Order Data Is Not Sent!!' })
         }
 
@@ -37,7 +37,7 @@ export const order_placement = async (req, res) => {
             userID: userID,
             items: item,
             email: email,
-            amount: amount ,
+            amount: amount,
             address: address
         })
 
@@ -82,21 +82,21 @@ export const order_placement = async (req, res) => {
 
 }
 
-export const Order_paymentVerificaiton =async( req , res )=>{
-    try{
+export const Order_paymentVerificaiton = async (req, res) => {
+    try {
         const { orderID } = req.body
-        if(!orderID){
-            return res.json({success : false , message: 'No OderID Found'})
+        if (!orderID) {
+            return res.json({ success: false, message: 'No OderID Found' })
         }
         const order = await order_module.findById(orderID)
-        if(!order){
-            return res.json({success : false , message: 'No Oder With This ID Found'})
+        if (!order) {
+            return res.json({ success: false, message: 'No Oder With This ID Found' })
         }
         order.payment = true
         await order.save()
-        return res.json({success : true , message: 'Payment Successful'})
+        return res.json({ success: true, message: 'Payment Successful' })
     }
-    catch(e){
+    catch (e) {
         console.log(e)
     }
 }
@@ -112,8 +112,8 @@ export const order_confirmation = async (req, res) => {
 
         const order = await order_module.findById(orderID);
         if (order) {
-            order.status = 'Order Has Been Confirmed!';
-            order.order_confirmation = true;
+            order.state = 'Order Has Been Confirmed!';
+            order.order_conformmation = true;
             await order.save();
             return res.json({ success: true, message: 'Order Confirmed' });
         } else {
@@ -128,7 +128,7 @@ export const order_confirmation = async (req, res) => {
 // Send Order to Logistics panel
 export const filter_confirmed_orders = async (req, res) => {
     try {
-        const confirmed_orders = await order_module.find({ order_confirmation: true });
+        const confirmed_orders = await order_module.find({ order_conformmation: true });
 
         // Check if any confirmed orders were found
         if (confirmed_orders.length === 0) {
@@ -146,14 +146,17 @@ export const filter_confirmed_orders = async (req, res) => {
 // Send all orders to admin panel
 export const send_orders = async (req, res) => {
     try {
-        const orders = await order_module.find({});
-
-        // Check if any orders were found
-        if (orders.length === 0) {
-            return res.json({ success: false, message: 'No orders have been placed.' });
+        const { currPage } = req.query
+        if (!currPage) {
+            return res.json({ success: false, message: 'Error recieveing currPage in orders.' });
+        }
+        const itemPerPage = 1
+        const skip = (currPage - 1) * itemPerPage
+        const orders = await order_module.find({}).skip(skip).limit(itemPerPage)
+        if (orders.length < 0) {
+            return res.json({ success: false, message: 'No Orders in DB.' });
         }
 
-        // Respond with the fetched orders
         return res.json({ success: true, message: 'Orders fetched!', orders });
     } catch (e) {
         // Handle any errors that occur during the database operation
@@ -164,18 +167,18 @@ export const send_orders = async (req, res) => {
 // use in user frontend
 export const fetch_singleUser_order = async (req, res) => {
     try {
-        const {userID} = req.body
-        if(!userID){
+        const { userID } = req.body
+        if (!userID) {
             return res.status(200).json({ success: false, message: 'User ID wasnt recived!' });
         }
         const userWithProviedID = await user_module.findById(userID)
-        if(!userWithProviedID){
+        if (!userWithProviedID) {
             return res.status(200).json({ success: false, message: 'User ID Doesnt Exist In the DataBase!' });
         }
         const orders_by_user = await order_module.find({ userID: req.body.userID });
-    
+
         if (!orders_by_user.length > 0) {
-            return res.status(200).json({ success: false , message: 'No Orders Placed!' });
+            return res.status(200).json({ success: false, message: 'No Orders Placed!' });
 
         }
 
@@ -189,35 +192,55 @@ export const fetch_singleUser_order = async (req, res) => {
 
 // Use in logistics panel to handle order status
 export const handle_order_status = async (req, res) => {
-    const { newStatus, orderID } = req.body;
+    try {
 
-    if(!newStatus){
-        return res.json({ success: false, message: 'No Order Status provided.' });
+        const OrderStates  =  req.body
+
+
+        if (OrderStates.length < 0) {
+            return res.status(500).json({ success: false, message: 'Failed Upadting status, no Items in array' })
+        }
+
+        const allPrommisesToResoveChnge = []
+        for (let i = 0; i < OrderStates.length; i++) {
+            const ID = OrderStates[i].ID
+            allPrommisesToResoveChnge.push(
+                 order_module.findById(ID).then((item) => {
+                    if (item) {
+                        item.state = OrderStates[i].state
+                        item.save()
+                        return ({ success: true, message: 'Succesfully Updated Status' })
+                    } else {
+                        return ({ success: false, message: 'Failed Updating Status' })
+                    }
+                }
+                )
+            )
+        }
+
+        await Promise.all(allPrommisesToResoveChnge);
+        return res.status(200).json({ success: true, message: 'Updating Succesfull' , ReviewStatus : allPrommisesToResoveChnge })
+
+
+    } catch (e) {
+        return res.status(500).json({ success: false, message: 'Failed Upadting status' })
     }
 
-    if(typeof(newStatus) !== 'string'){
-        return res.json({ success: false, message: 'No Order Status Must be A String.' });
-    }
-    const recivedOrderstatus = newStatus
-
-    // Check if orderID is provided
-    if (!orderID) {
-        return res.json({ success: false, message: 'No Order ID provided.' });
-    }
-
-    // Fetch the order
-    const order = await order_module.findById(orderID);
-
-    // Check if the order was found
-    if (!order) {
-        return res.json({ success: false, message: 'Order not found with the provided ID.' });
-    }
-
-    // Update the order status
-    order.status = recivedOrderstatus;
-    await order.save();
-
-    return res.json({ success: true, message: 'Order status updated!' });
 }
 
+export const getTotalPages = async (req, res) => {
+    try {
+        const itemPerPage = 1
+        const itemAmnt = await order_module.countDocuments({})
+        if (!itemAmnt) {
+            return res.json({ success: false, message: 'No Orders Placed!' })
+        }
+        const totalPages = Math.ceil(itemAmnt / itemPerPage)
+        return res.json({ success: true, message: 'Successfully calculated total page amount', totalPages: totalPages })
 
+
+    } catch (e) {
+        return res.status(500).json({ success: false, message: 'Failed getting total pages amount' })
+
+    }
+}

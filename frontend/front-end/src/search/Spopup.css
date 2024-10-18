@@ -72,3 +72,17 @@
 .src_body input {
     margin-bottom: 5px; /* Reduces the space between input and result box */
 }
+
+@media (max-width:1290px) {
+    .src_body{
+        margin-top: -110px;
+    }
+}
+
+@media (max-width:1238px) {
+    .src_body{
+        margin-top: -120px;
+        margin-left: 140px;
+    }
+}
+

@@ -11,8 +11,8 @@ function Footer() {
                 </div>    
                 <div className="right">
                     <h2>Find Us.</h2>
-                    <p onClick={() => window.open('https://instagram.com')}>Instagram</p>
-                    <p onClick={() => window.open('https://github.com')}>Github</p>
+                    <p onClick={() => window.open('https://www.instagram.com/sht_matthew/')}>Instagram</p>
+                    <p onClick={() => window.open('https://github.com/shtmthw')}>Github</p>
                     <p onClick={() => window.open('https://facebook.com')}>Facebook</p>
                 </div>
             </div>        

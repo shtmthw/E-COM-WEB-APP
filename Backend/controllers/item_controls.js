@@ -28,8 +28,18 @@ export const add_itemm = async (req, res) => {
 
 export const fetch_items = async (req, res) => {
     try {
-        const resp = await product_model.find({})
-        return res.json({ success: true, message: 'Successfully Fetched Every Items!', items: resp })
+        const {currPage} = req.query
+        const itemPerPage = 2
+        if(!currPage){
+            res.json({ success: false, message: 'No page number sent!!' })
+        }
+        const skip = (currPage - 1) * itemPerPage
+        const fetcedItems = await product_model.find({}).skip(skip).limit(itemPerPage)
+        if(fetcedItems.length < 0){
+            res.json({ success: false, message: 'Error Fetching Items!!' })
+        }
+        
+        res.json({ success: true, message: 'Successfully Fetched Every Items!', items: fetcedItems })
 
     } catch (e) {
         res.json({ success: false, message: 'Error Fetching Every Items!!' })
@@ -70,7 +80,7 @@ export const update_item_ordered_amnt = async (req, res) => {
 
         // Create an array to hold the promises for updating each item
         const updatePromises = [];
-
+        
         for (let i = 0; i < itemIDs.length; i++) {
             const id = itemIDs[i].itemID;
             // Push each update operation into the promises array
@@ -179,11 +189,34 @@ export const fetchSingleItems = async(req , res)=>{
         }
         res.json({success : true , message : 'Item Successfully Fecthed!!' , singleItem : foundItem})
     }catch(e){
-        console.error(error);
+        console.error(e);
         res.status(500).json({
             success: false,
             message: 'Error fetching product',
-            error: error.message
+            error: e.message
+        });
+    }
+}
+
+
+//used in admin panel to get total page amnt :)
+export const getItemsPageNumbers = async (req , res) => {
+    try{
+
+        const itemsAmnt = await product_model.countDocuments({})
+        if(!itemsAmnt){
+           return res.status(500).json({success : false , message : 'No items in the DataBase'})
+        }
+        const itemPerPage = 2
+        const pageAmnt = Math.ceil(itemsAmnt / itemPerPage)
+        res.status(200).json({success : true , message : 'Successfully fetched total page amount' , pageAmnt : pageAmnt})
+
+    }catch(e){
+        console.error(e);
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching product',
+            error: e.message
         });
     }
 }
